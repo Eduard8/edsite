@@ -1,0 +1,337 @@
+/**
+ * Chaos Mode Styling Configuration
+ * 
+ * All chaos mode styling is organized here for easy discovery and customization.
+ * 
+ * HOW TO CUSTOMIZE CHAOS MODE:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * 1. CHANGE ANIMATION SPEED
+ *    Edit any --chaos-*-duration variable in the CSS Custom Properties section.
+ *    Example: Change --chaos-wobble-duration from 1.35s to 2s for slower wobble
+ * 
+ * 2. CHANGE FONT FAMILY
+ *    Edit --chaos-font-family. Add or remove font names to the comma-separated list.
+ *    Example: --chaos-font-family: "Impact", "Arial Black", sans-serif;
+ * 
+ * 3. CHANGE TEXT SHADOW / GLOW
+ *    Edit --chaos-text-shadow. Modify colors (#ff00a8, #00ffee) or spread values
+ *    Example: --chaos-text-shadow: 2px 0 #ff00a8, -2px 0 #00ffee;
+ * 
+ * 4. CHANGE ANIMATION DELAYS (for Event Cards)
+ *    Edit --chaos-event-card-*-delay values in the CSS Custom Properties section.
+ *    Example: --chaos-event-card-media-delay: -0.5s; (larger negative = more offset)
+ * 
+ * 5. ADJUST BURST PHASE INTENSITY
+ *    Edit --chaos-burst-* durations to make the 1-second burst phase faster/slower.
+ *    Shorter = more intense, Longer = more spread out
+ * 
+ * To revert to defaults, just reset the variables in the :root selector below.
+ */
+
+/* ============================================================================
+   CHAOS MODE CONFIGURATION VARIABLES
+   ============================================================================
+   These values control the appearance and behavior of chaos mode. Adjust them
+   to tune the intensity and style of the chaos experience.
+*/
+
+:root {
+  /* Font Family Stack - Chaos Mode */
+  --chaos-font-family: var(--font-style-lab-cherry-cream-soda), "Trebuchet MS", cursive;
+  --chaos-title-font-family: var(--font-style-lab-chewy), "Trebuchet MS", cursive;
+
+  /* Text Shadow - Chaos Mode */
+  --chaos-text-shadow: 1px 0 #ff00a8, -1px 0 #00ffee, 0 2px rgba(0, 0, 0, 0.38);
+
+  /* Steady State Animation Timings */
+  --chaos-wobble-duration: 1.35s;
+  --chaos-spin-pop-duration: 1.15s;
+  --chaos-rainbow-duration: 4.8s;
+  --chaos-scroll-text-duration: 2.6s;
+  --chaos-badge-bounce-duration: 0.9s;
+
+  /* Burst State Animation Timings (1s burst phase) */
+  --chaos-burst-wobble-duration: 220ms;
+  --chaos-burst-spin-pop-duration: 140ms;
+  --chaos-burst-jump-cut-duration: 180ms;
+  --chaos-burst-rainbow-duration: 0.8s;
+  --chaos-burst-scroll-text-duration: 0.6s;
+  --chaos-burst-badge-bounce-duration: 140ms;
+  --chaos-burst-universal-duration: 180ms;
+
+  /* Event Card Animation Timings (Steady) */
+  --chaos-event-card-wobble: 1.8s;
+  --chaos-event-card-media-spin: 1.35s;
+  --chaos-event-card-content-jump: 1.55s;
+  --chaos-event-card-title-spin: 0.92s;
+  --chaos-event-card-subtitle-wobble: 1.1s;
+  --chaos-event-card-description-jump: 1.45s;
+  --chaos-event-card-actions-wobble: 1.25s;
+  --chaos-event-card-actions-link-spin: 0.88s;
+
+  /* Event Card Animation Timings (Burst) */
+  --chaos-burst-event-card-wobble: 200ms;
+  --chaos-burst-event-card-media-spin: 140ms;
+  --chaos-burst-event-card-content-jump: 180ms;
+  --chaos-burst-event-card-title-spin: 120ms;
+  --chaos-burst-event-card-subtitle-wobble: 160ms;
+  --chaos-burst-event-card-description-jump: 160ms;
+  --chaos-burst-event-card-actions-wobble: 160ms;
+
+  /* Event Card Animation Delays (Steady) */
+  --chaos-event-card-media-delay: -0.25s;
+  --chaos-event-card-content-delay: -0.45s;
+  --chaos-event-card-title-delay: -0.18s;
+  --chaos-event-card-subtitle-delay: -0.35s;
+  --chaos-event-card-description-delay: -0.62s;
+  --chaos-event-card-actions-delay: -0.52s;
+  --chaos-event-card-actions-link-delay: -0.2s;
+
+  /* Burst State nth-child Animation Durations */
+  --chaos-burst-nth-child-2: 130ms;
+  --chaos-burst-nth-child-3: 210ms;
+  --chaos-burst-nth-child-5: 160ms;
+}
+
+/* ============================================================================
+   CHAOS MODE - BODY & BACKGROUND STYLING
+   ============================================================================ */
+
+[data-chaos-mode="on"] body {
+  font-family: var(--chaos-font-family) !important;
+  text-transform: none;
+  text-shadow: var(--chaos-text-shadow);
+}
+
+[data-chaos-mode="on"] h1,
+[data-chaos-mode="on"] h2,
+[data-chaos-mode="on"] h3,
+[data-chaos-mode="on"] h4,
+[data-chaos-mode="on"] h5,
+[data-chaos-mode="on"] h6,
+[data-chaos-mode="on"] .page-title,
+[data-chaos-mode="on"] .hero-title,
+[data-chaos-mode="on"] .card-title,
+[data-chaos-mode="on"] .video-card-title,
+[data-chaos-mode="on"] .state-panel-title,
+[data-chaos-mode="on"] .contact-info-title,
+[data-chaos-mode="on"] .topbar-brand,
+[data-chaos-mode="on"] .topbar-nav a,
+[data-chaos-mode="on"] .topbar-nav a *,
+[data-chaos-mode="on"] .chaos-gate-button {
+  font-family: var(--chaos-title-font-family), var(--chaos-font-family), cursive;
+}
+
+[data-chaos-mode="on"] .topbar-nav {
+  gap: 0.75rem;
+}
+
+[data-chaos-mode="on"] .topbar-nav a,
+[data-chaos-mode="on"] .topbar-nav a * {
+  font-size: clamp(1rem, 0.92rem + 0.28vw, 1.12rem);
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+[data-chaos-mode="on"] .event-card .card-title {
+  font-size: clamp(1.3rem, 1.14rem + 0.45vw, 1.6rem);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+[data-chaos-mode="on"] .video-card-title {
+  font-size: clamp(1.08rem, 1rem + 0.24vw, 1.22rem);
+  line-height: 1.35;
+  letter-spacing: 0.012em;
+}
+
+@media (min-width: 768px) {
+  [data-chaos-mode="on"] .topbar-nav {
+    gap: 1rem;
+  }
+
+  [data-chaos-mode="on"] .topbar-nav a,
+  [data-chaos-mode="on"] .topbar-nav a * {
+    font-size: clamp(1.08rem, 0.98rem + 0.3vw, 1.2rem);
+    line-height: 1.4;
+    letter-spacing: 0.024em;
+  }
+
+  [data-chaos-mode="on"] .event-card .card-title {
+    font-size: clamp(1.45rem, 1.2rem + 0.55vw, 1.78rem);
+    line-height: 1.33;
+    letter-spacing: 0.013em;
+  }
+
+  [data-chaos-mode="on"] .video-card-title {
+    font-size: clamp(1.16rem, 1.02rem + 0.3vw, 1.34rem);
+    line-height: 1.38;
+    letter-spacing: 0.016em;
+  }
+}
+
+/* ============================================================================
+   CHAOS MODE - STEADY STATE ANIMATIONS (Nav Pulse: 1s on route change)
+   ============================================================================ */
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] body {
+  animation:
+    chaos-rainbow var(--chaos-rainbow-duration) linear infinite,
+    chaos-background-slide 8.5s linear infinite;
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .topbar,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .state-panel,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .contact-form-card,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .chaos-gate-shell,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .btn-primary,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .btn-secondary,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .btn-submit,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .link-inline,
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .topbar-nav a {
+  animation: chaos-wobble var(--chaos-wobble-duration) ease-in-out infinite;
+}
+
+/* ============================================================================
+   CHAOS MODE - TITLE ANIMATIONS (Always on in chaos mode)
+   ============================================================================ */
+
+[data-chaos-mode="on"] .page-title,
+[data-chaos-mode="on"] .hero-title,
+[data-chaos-mode="on"] .chaos-gate-button {
+  animation: chaos-spin-pop var(--chaos-spin-pop-duration) ease-in-out infinite;
+}
+
+[data-chaos-mode="on"] .chaos-gate-button {
+  transform-origin: center;
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--accent) 60%, transparent),
+    0 18px 36px color-mix(in srgb, var(--foreground) 40%, transparent);
+}
+
+/* ============================================================================
+   CHAOS MODE - STEADY STATE COMPONENT ANIMATIONS
+   ============================================================================ */
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .chaos-gate-marquee {
+  animation: chaos-scroll-text var(--chaos-scroll-text-duration) linear infinite;
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .chaos-gate-stickers span {
+  animation: chaos-badge-bounce var(--chaos-badge-bounce-duration) ease-in-out infinite;
+}
+
+/* Event Card - Steady State Animations */
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card {
+  animation: chaos-wobble var(--chaos-event-card-wobble) ease-in-out infinite;
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .event-card-media {
+  animation: chaos-spin-pop var(--chaos-event-card-media-spin) ease-in-out infinite;
+  animation-delay: var(--chaos-event-card-media-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .event-card-content {
+  animation: chaos-jump-cut var(--chaos-event-card-content-jump) steps(2, end) infinite;
+  animation-delay: var(--chaos-event-card-content-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .card-title {
+  animation: chaos-spin-pop var(--chaos-event-card-title-spin) ease-in-out infinite;
+  animation-delay: var(--chaos-event-card-title-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .card-subtitle {
+  animation: chaos-wobble var(--chaos-event-card-subtitle-wobble) ease-in-out infinite;
+  animation-delay: var(--chaos-event-card-subtitle-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .card-description {
+  animation: chaos-jump-cut var(--chaos-event-card-description-jump) steps(2, end) infinite;
+  animation-delay: var(--chaos-event-card-description-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .event-card-actions {
+  animation: chaos-wobble var(--chaos-event-card-actions-wobble) linear infinite;
+  animation-delay: var(--chaos-event-card-actions-delay);
+}
+
+[data-chaos-mode="on"][data-chaos-nav-anim="on"] .event-card .event-card-actions .link-inline {
+  animation: chaos-spin-pop var(--chaos-event-card-actions-link-spin) ease-in-out infinite;
+  animation-delay: var(--chaos-event-card-actions-link-delay);
+}
+
+/* ============================================================================
+   CHAOS MODE - BURST STATE ANIMATIONS (1s intense phase on mode enter)
+   ============================================================================ */
+
+[data-chaos-burst="on"] body {
+  animation:
+    chaos-rainbow var(--chaos-burst-rainbow-duration) linear infinite,
+    chaos-background-slide 1.1s linear infinite;
+}
+
+[data-chaos-burst="on"] body * {
+  animation: chaos-jump-cut var(--chaos-burst-universal-duration) steps(2, end) infinite;
+  transform-origin: center;
+}
+
+[data-chaos-burst="on"] body *:nth-child(2n) {
+  animation-duration: var(--chaos-burst-nth-child-2);
+}
+
+[data-chaos-burst="on"] body *:nth-child(3n) {
+  animation-duration: var(--chaos-burst-nth-child-3);
+}
+
+[data-chaos-burst="on"] body *:nth-child(5n) {
+  animation-name: chaos-spin-pop;
+  animation-duration: var(--chaos-burst-nth-child-5);
+}
+
+[data-chaos-burst="on"] .topbar,
+[data-chaos-burst="on"] .state-panel,
+[data-chaos-burst="on"] .contact-form-card,
+[data-chaos-burst="on"] .chaos-gate-shell,
+[data-chaos-burst="on"] .btn-primary,
+[data-chaos-burst="on"] .btn-secondary,
+[data-chaos-burst="on"] .btn-submit,
+[data-chaos-burst="on"] .link-inline,
+[data-chaos-burst="on"] .topbar-nav a {
+  animation: chaos-wobble var(--chaos-burst-wobble-duration) linear infinite;
+}
+
+[data-chaos-burst="on"] .chaos-gate-marquee {
+  animation: chaos-scroll-text var(--chaos-burst-scroll-text-duration) linear infinite;
+}
+
+[data-chaos-burst="on"] .chaos-gate-stickers span {
+  animation: chaos-badge-bounce var(--chaos-burst-badge-bounce-duration) ease-in-out infinite;
+}
+
+/* Event Card - Burst State Animations */
+[data-chaos-burst="on"] .event-card {
+  animation: chaos-wobble var(--chaos-burst-event-card-wobble) linear infinite;
+}
+
+[data-chaos-burst="on"] .event-card .event-card-media {
+  animation: chaos-spin-pop var(--chaos-burst-event-card-media-spin) linear infinite;
+}
+
+[data-chaos-burst="on"] .event-card .event-card-content {
+  animation: chaos-jump-cut var(--chaos-burst-event-card-content-jump) steps(2, end) infinite;
+}
+
+[data-chaos-burst="on"] .event-card .card-title {
+  animation: chaos-spin-pop var(--chaos-burst-event-card-title-spin) linear infinite;
+}
+
+[data-chaos-burst="on"] .event-card .card-subtitle,
+[data-chaos-burst="on"] .event-card .card-description,
+[data-chaos-burst="on"] .event-card .event-card-actions {
+  animation: chaos-wobble var(--chaos-burst-event-card-subtitle-wobble) linear infinite;
+}
+
+
+

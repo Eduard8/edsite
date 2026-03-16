@@ -1,0 +1,10 @@
+{
+  "Boring": {
+    "label": "Boring but Readable",
+    "colors": ["#0a0a0a", "#3f3f46", "#7c3aed", "#c4b5fd", "#ffffff"]
+  },
+  "Obnoxious": {
+    "label": "Graphic Design is my passion",
+    "colors": ["#0049B7", "#00DDFF", "#fff685", "#f75990", "#ff1d58"]
+  }
+}

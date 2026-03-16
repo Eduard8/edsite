@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Comedy Site MVP
+
+Website:
+- `/videos` reads YouTube video entries from a remotely hosted JSON file.
+- `/calendar` reads upcoming shows from Google Calendar.
+- `/contact` posts to a hosted form endpoint (Formspree, Netlify Forms endpoint, or similar).
+
+## Requirements
+
+- Node.js 20+
+- A hosted videos JSON URL
+- A public Google Calendar and API key with Calendar API enabled
+- A hosted form endpoint URL
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in values:
+
+```bash
+GOOGLE_CALENDAR_API_KEY=your_api_key
+GOOGLE_CALENDAR_ID=your_public_calendar_id
+NEXT_PUBLIC_CONTACT_FORM_ACTION=https://formspree.io/f/your-form-id
+REMOTE_VIDEOS_JSON_URL=https://example.com/videos.json
+COLOR_SCHEME=Boring
+```
+
+`GOOGLE_CALENDAR_ID` is usually the calendar email-like ID from Google Calendar settings.
+
+`COLOR_SCHEME` supports any key in `src/theme/colorSchemes.json` (currently: `Boring`, `Obnoxious`) and sets the default palette before user overrides.
 
 ## Getting Started
 
@@ -6,31 +34,104 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build and Validate
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
+- Videos are fetched from a remotely hosted JSON file and revalidated every 5 minutes.
+- Video `title` and `description` are optional in JSON; if `title` is missing, the app resolves it from lightweight YouTube metadata, and if `description` is missing, it is left blank.
+- Calendar data is fetched using the Google Calendar Events API and revalidated every 5 minutes.
+- Ticket links are derived from `source.url` when present, otherwise from links found in event descriptions.
+- Map links are derived from the event location field.
+- Contact form includes a hidden honeypot field; enable provider-side spam filtering for best results.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Remote Videos JSON
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Recommended schema:
 
-## Deploy on Vercel
+```json
+{
+	"videos": [
+		{
+			"id": "airport-bit",
+			"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+			"title": "Optional custom title",
+			"description": "Optional custom description",
+			"thumbnail": "https://example.com/custom-thumbnail.jpg"
+		}
+	]
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `url` is required and should be a full YouTube URL.
+- `title`, `description`, and `thumbnail` are optional.
+- If `thumbnail` is omitted, the site derives a standard YouTube thumbnail from the video URL.
+- A public GitHub Gist raw URL works well as the remote JSON host.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Provider Swaps
+
+To switch away from Google Calendar later, add a new provider implementing `CalendarProvider` in `src/application/ports/calendarProvider.ts` and wire it in `src/infrastructure/composition/createCalendarProvider.ts`.
+
+## Themes
+
+- Theme state is managed by `next-themes` with `Light`, `Dark`, and `System` modes.
+- The active mode is written to a `data-theme` attribute on `<html>`.
+- Existing `dark:*` classes are supported via a custom variant that maps to `data-theme="dark"`.
+
+## Colour Schemes
+
+- Colour scheme values are defined in `src/theme/colorSchemes.json` as hex token maps.
+- Each scheme defines 5 colors from darkest to lightest.
+- Each scheme can optionally define `fontFamily`; if omitted, the default app sans stack is used.
+- Light and dark mode reuse the same 5 colors by flipping order automatically.
+- Colour scheme state is persisted in local storage and applied on `<html>`.
+- Default scheme comes from `COLOR_SCHEME` in environment config.
+
+## Chaos Entry
+
+- Home (`/`) is a mode-entry page with a large button: `press here to enter obnoxious mode`.
+- Entering chaos mode applies the `Obnoxious` color scheme through the existing color-scheme provider (the theme engine remains extensible for future schemes).
+- While chaos mode is active, a small `Normal mode` control appears in the top bar to switch back.
+
+### Chaos Audio
+
+- Optional local audio source: `public/audio/chaos-mode.mp3`.
+- Audio starts only after user interaction when entering chaos mode, plays once, and stops when returning to normal mode.
+- If the file is missing or browser playback is blocked, the UI still works and logs a warning in the console.
+
+## UI Kit Swapping
+
+- App and feature components should import primitives from `src/ui/facade/index.ts` only.
+- The active UI kit is selected in `src/ui/composition/createUiFacade.ts`.
+- Available adapters: `src/ui/adapters/shadcn` and `src/ui/adapters/mantine`.
+
+Set the active kit with:
+
+```bash
+NEXT_PUBLIC_UI_KIT=shadcn
+```
+
+or
+
+```bash
+NEXT_PUBLIC_UI_KIT=mantine
+```
+
+If unset, the default is `shadcn`.
+
+To add or swap kits later:
+
+1. Add a new adapter folder, for example `src/ui/adapters/mantine`.
+2. Implement the same exported primitive names as the current adapter.
+3. Register the adapter in `src/ui/composition/createUiFacade.ts`.
+
+This keeps application and page code unchanged during a kit migration.

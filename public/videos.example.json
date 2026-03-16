@@ -1,0 +1,21 @@
+{
+  "videos": [
+    {
+      "id": "first-bit",
+      "url": "https://youtu.be/eAkMGOogztE",
+      "title": "Very first time I did standup!",
+      "description": "As part of an EasyLaughs course"
+    },
+    {
+      "id": "Dr-Dzl",
+      "url": "https://youtu.be/ZpigCwnVY5A",
+      "title": "Doctor Dazzle hosts a gameshow at Utrecht International Comedy Festival Cosplay Show",
+      "description": "With Esteban @stlando as a Lord of the Rings Elf stuck in the Netherlands. Ahmad Rabieh as Gay Jesus and Rachel Morton-Young (rachelmortonyoung) as herself"
+    },
+    {
+      "id": "TUNA",
+      "url": "https://youtu.be/EXeYLhIoOq4",
+      "title": "Five minutes standup from my first year. Won my first award that night!"
+    }
+  ]
+}
