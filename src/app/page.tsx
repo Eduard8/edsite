@@ -19,10 +19,10 @@ export default function Home() {
             aria-label="turn on obnoxious mode"
             onClick={() => setColorScheme(chaosModeColorScheme)}
           >
-            Graphic Design is my Passion
+            View EdSite as the "artist" intended
           </UiButton>
           <p className="chaos-gate-note">
-            Do you want to use the site as the artist intended? (warning: obnoxious and loud)
+            (warning: obnoxious and loud)
           </p>
         </UiAnimatedContainer>
       )}
