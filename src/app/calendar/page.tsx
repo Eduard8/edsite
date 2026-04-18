@@ -13,7 +13,7 @@ export default async function CalendarPage() {
         <UiAnimatedContainer>
           <section className="calendar-shell">
             <h1 className="page-title">Calendar</h1>
-            <p className="text-muted-sm">Upcoming shows, ticket links, and venue details.</p>
+            <p className="text-muted-sm scrolling-subheader">Upcoming shows, ticket links, and venue details.</p>
           </section>
         </UiAnimatedContainer>
         <UiAnimatedContainer delay={0.05}>
@@ -36,7 +36,7 @@ export default async function CalendarPage() {
               {hasEvents ? eventCountLabel : "No scheduled shows yet"}
             </p>
           </div>
-          <p className="text-muted-sm">Upcoming shows, ticket links, and venue details.</p>
+          <p className="text-muted-sm scrolling-subheader">Upcoming shows, ticket links, and venue details.</p>
         </section>
       </UiAnimatedContainer>
 

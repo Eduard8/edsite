@@ -47,6 +47,7 @@
   /* Steady State Animation Timings */
   --chaos-wobble-duration: 1.35s;
   --chaos-spin-pop-duration: 1.15s;
+  --chaos-subheader-bounce-duration: 1.7s;
   --chaos-rainbow-duration: 4.8s;
   --chaos-scroll-text-duration: 2.6s;
   --chaos-badge-bounce-duration: 0.9s;
@@ -201,6 +202,12 @@
 [data-chaos-mode="on"] .hero-title,
 [data-chaos-mode="on"] .chaos-gate-button {
   animation: chaos-spin-pop var(--chaos-spin-pop-duration) ease-in-out infinite;
+}
+
+[data-chaos-mode="on"] .scrolling-subheader {
+  animation: chaos-subheader-bounce var(--chaos-subheader-bounce-duration) ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
 }
 
 [data-chaos-mode="on"] .chaos-gate-button {

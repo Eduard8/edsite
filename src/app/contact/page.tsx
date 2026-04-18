@@ -11,7 +11,7 @@ export default function ContactPage() {
       <UiAnimatedContainer>
         <section className="contact-shell">
           <h1 className="page-title">Contact</h1>
-          <p className="text-muted-sm">Contact Ed!</p>
+          <p className="text-muted-sm scrolling-subheader">Contact Ed!</p>
         </section>
       </UiAnimatedContainer>
 

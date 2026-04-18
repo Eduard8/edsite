@@ -10,6 +10,15 @@ export default function Home() {
 
   return (
     <main className="page page--home-gate">
+      <div className="home-title-wrap">
+        <UiAnimatedContainer>
+          <section className="calendar-shell home-title-shell">
+            <h1 className="page-title">EdSite</h1>
+            <p className="text-muted-sm scrolling-subheader">A Website for Ed</p>
+          </section>
+        </UiAnimatedContainer>
+      </div>
+
       {!isChaosMode && (
         <UiAnimatedContainer className="chaos-gate-shell chaos-gate-off" delay={0.08}>
           <UiButton
@@ -19,7 +28,7 @@ export default function Home() {
             aria-label="turn on obnoxious mode"
             onClick={() => setColorScheme(chaosModeColorScheme)}
           >
-            View EdSite as the "artist" intended
+            View as the "artist" intend-ed
           </UiButton>
           <p className="chaos-gate-note">
             (warning: obnoxious and loud)
@@ -29,7 +38,15 @@ export default function Home() {
 
       {isChaosMode && (
         <UiAnimatedContainer className="chaos-gate-shell chaos-gate-on" delay={0.08}>
-<UiTextarea>As intended</UiTextarea>
+          <UiButton
+            type="button"
+            size="lg"
+            className="chaos-gate-button"
+            aria-label="turn off obnoxious mode"
+            onClick={() => setColorScheme("Boring")}
+          >
+            Make it stop
+          </UiButton>
         </UiAnimatedContainer>
       )}
     </main>
