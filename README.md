@@ -2,14 +2,14 @@
 
 Website:
 - `/videos` reads YouTube video entries from a remotely hosted JSON file.
-- `/calendar` reads upcoming shows from Google Calendar.
+- `/calendar` reads upcoming shows from Sanity.
 - `/contact` posts to a hosted form endpoint (Formspree, Netlify Forms endpoint, or similar).
 
 ## Requirements
 
 - Node.js 20+
 - A hosted videos JSON URL
-- A public Google Calendar and API key with Calendar API enabled
+- A Sanity project with a public dataset
 - A hosted form endpoint URL
 
 ## Environment Variables
@@ -17,14 +17,14 @@ Website:
 Copy `.env.example` to `.env.local` and fill in values:
 
 ```bash
-GOOGLE_CALENDAR_API_KEY=your_api_key
-GOOGLE_CALENDAR_ID=your_public_calendar_id
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_CONTACT_FORM_ACTION=https://formspree.io/f/your-form-id
 REMOTE_VIDEOS_JSON_URL=https://example.com/videos.json
 COLOR_SCHEME=Boring
 ```
 
-`GOOGLE_CALENDAR_ID` is usually the calendar email-like ID from Google Calendar settings.
+`NEXT_PUBLIC_SANITY_DATASET` is optional and defaults to `production`.
 
 `COLOR_SCHEME` supports any key in `src/theme/colorSchemes.json` (currently: `Boring`, `Obnoxious`) and sets the default palette before user overrides.
 
@@ -49,9 +49,9 @@ npm run build
 
 - Videos are fetched from a remotely hosted JSON file and revalidated every 5 minutes.
 - Video `title` and `description` are optional in JSON; if `title` is missing, the app resolves it from lightweight YouTube metadata, and if `description` is missing, it is left blank.
-- Calendar data is fetched using the Google Calendar Events API and revalidated every 5 minutes.
-- Ticket links are derived from `source.url` when present, otherwise from links found in event descriptions.
-- Map links are derived from the event location field.
+- Shows are fetched from the published Sanity dataset and revalidated every 5 minutes.
+- Past shows are omitted. The public page lists the soonest upcoming shows.
+- Add and edit shows at `/studio` after signing in to the Sanity project.
 - Contact form includes a hidden honeypot field; enable provider-side spam filtering for best results.
 
 ### Remote Videos JSON
@@ -77,9 +77,32 @@ Recommended schema:
 - If `thumbnail` is omitted, the site derives a standard YouTube thumbnail from the video URL.
 - A public GitHub Gist raw URL works well as the remote JSON host.
 
-## Future Provider Swaps
+### Shows in Sanity
 
-To switch away from Google Calendar later, add a new provider implementing `CalendarProvider` in `src/application/ports/calendarProvider.ts` and wire it in `src/infrastructure/composition/createCalendarProvider.ts`.
+Each show document has:
+
+- `title` (required)
+- `start` datetime (required)
+- `end` datetime (optional)
+- `allDay` boolean (optional)
+- `description` (optional)
+- `poster` image (optional)
+- `venue` (optional)
+- `mapsUrl` (optional). If it is omitted and `venue` is set, the site links to a Google Maps search for that venue.
+- `ticketUrl` (optional)
+
+Drafts stay off `/calendar` until they are published.
+
+### Studio setup
+
+1. Create a free project at [sanity.io/manage](https://www.sanity.io/manage).
+2. Copy the project id into `NEXT_PUBLIC_SANITY_PROJECT_ID`. Set `NEXT_PUBLIC_SANITY_DATASET` if you are not using `production`.
+3. In the Sanity project API settings, add CORS origins for `http://localhost:3000` and the production site origin, and allow credentials.
+4. Open `/studio`, sign in with the Sanity account that owns the project, and publish a show.
+
+The dataset can stay public for reads. The site does not need a read token.
+
+`/calendar` loads shows through `CalendarProvider` in `src/application/ports/calendarProvider.ts`. The Sanity implementation is wired in `src/infrastructure/composition/createCalendarProvider.ts`.
 
 ## Themes
 

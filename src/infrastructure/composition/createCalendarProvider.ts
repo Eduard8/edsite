@@ -1,16 +1,16 @@
 import type { CalendarProvider } from "@/application/ports/calendarProvider";
-import { getCalendarConfig } from "@/config/env";
-import { GoogleCalendarProvider } from "@/infrastructure/calendar/googleCalendarClient";
+import { getSanityConfig } from "@/sanity/env";
+import { SanityShowsProvider } from "@/infrastructure/shows/sanityShowsClient";
 
 export function createCalendarProvider(): CalendarProvider | null {
-  const calendarConfig = getCalendarConfig();
-  if (!calendarConfig) {
+  const sanityConfig = getSanityConfig();
+  if (!sanityConfig) {
     return null;
   }
 
-  return new GoogleCalendarProvider({
-    apiKey: calendarConfig.googleCalendarApiKey,
-    calendarId: calendarConfig.googleCalendarId,
+  return new SanityShowsProvider({
+    projectId: sanityConfig.projectId,
+    dataset: sanityConfig.dataset,
     revalidateSeconds: 300,
   });
 }

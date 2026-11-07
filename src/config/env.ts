@@ -5,25 +5,6 @@ import {
 } from "@/theme/colorSchemes";
 import { isChaosModeColorScheme, normalModeColorScheme } from "@/theme/chaosMode";
 
-type CalendarConfig = {
-  googleCalendarApiKey: string;
-  googleCalendarId: string;
-};
-
-export function getCalendarConfig(): CalendarConfig | null {
-  const googleCalendarApiKey = process.env.GOOGLE_CALENDAR_API_KEY;
-  const googleCalendarId = process.env.GOOGLE_CALENDAR_ID;
-
-  if (!googleCalendarApiKey || !googleCalendarId) {
-    return null;
-  }
-
-  return {
-    googleCalendarApiKey,
-    googleCalendarId,
-  };
-}
-
 export function getContactFormAction(): string | null {
   return process.env.NEXT_PUBLIC_CONTACT_FORM_ACTION ?? null;
 }

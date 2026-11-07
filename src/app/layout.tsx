@@ -1,12 +1,8 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SiteFrame } from "@/components/SiteFrame";
 import { getDefaultColorScheme } from "@/config/env";
-import { ChaosModeAudioController } from "@/components/providers/ChaosModeAudioController";
-import { ColorSchemeProvider } from "@/components/providers/ColorSchemeProvider";
-import { StyleLabProvider } from "@/components/providers/StyleLabProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { TopBar } from "@/components/TopBar";
 import { isChaosModeColorScheme } from "@/theme/chaosMode";
 import { getColorSchemeCssVariables } from "@/theme/colorSchemes";
 import { styleLabFontsVariableClassName } from "@/theme/styleLabFontVariables";
@@ -51,17 +47,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <ColorSchemeProvider defaultColorScheme={defaultColorScheme}>
-            <StyleLabProvider>
-              <ChaosModeAudioController />
-              <div className="mx-auto min-h-screen w-full max-w-5xl px-6 py-8">
-                <TopBar />
-                {children}
-              </div>
-            </StyleLabProvider>
-          </ColorSchemeProvider>
-        </ThemeProvider>
+        <SiteFrame defaultColorScheme={defaultColorScheme}>{children}</SiteFrame>
       </body>
     </html>
   );
