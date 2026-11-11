@@ -53,6 +53,11 @@ export function EventCard({ event }: EventCardProps) {
               <MapPinIcon className="h-4 w-4" />
               {viewModel.venueLabel}
             </a>
+          ) : viewModel.venue ? (
+            <span className="inline-flex items-center gap-1">
+              <MapPinIcon className="h-4 w-4" />
+              {viewModel.venue}
+            </span>
           ) : null}
           {viewModel.ticketUrl ? (
             <a

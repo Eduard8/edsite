@@ -48,6 +48,7 @@ export const showType = defineType({
       name: "mapsUrl",
       title: "Map link",
       type: "url",
+      description: "Optional. A venue name alone does not create a map link.",
       validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
     }),
     defineField({
