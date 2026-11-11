@@ -1,4 +1,5 @@
 import type { ShowEvent } from "@/domain/event";
+import { showTimeZone } from "@/domain/showSchedule";
 
 function formatShowDate(iso: string, isAllDay: boolean): string {
   const date = new Date(iso);
@@ -9,6 +10,7 @@ function formatShowDate(iso: string, isAllDay: boolean): string {
 
   if (isAllDay) {
     return new Intl.DateTimeFormat("nl-NL", {
+      timeZone: showTimeZone,
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -17,6 +19,7 @@ function formatShowDate(iso: string, isAllDay: boolean): string {
   }
 
   return new Intl.DateTimeFormat("nl-NL", {
+    timeZone: showTimeZone,
     weekday: "short",
     month: "short",
     day: "numeric",
