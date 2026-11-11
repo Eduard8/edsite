@@ -1,10 +1,10 @@
 import { getUpcomingShows } from "@/application/getUpcomingShows";
 import type { ShowEvent } from "@/domain/event";
 import {
-  CalendarAuthError,
-  CalendarParseError,
-  CalendarRequestError,
-} from "@/infrastructure/calendar/errors";
+  ShowsAuthError,
+  ShowsParseError,
+  ShowsRequestError,
+} from "@/infrastructure/shows/errors";
 import { createCalendarProvider } from "@/infrastructure/composition/createCalendarProvider";
 
 export type CalendarPageViewModel = {
@@ -14,16 +14,16 @@ export type CalendarPageViewModel = {
 };
 
 function toCalendarErrorMessage(error: unknown): string {
-  if (error instanceof CalendarAuthError) {
-    return "Calendar credentials are invalid or missing access to this calendar.";
+  if (error instanceof ShowsAuthError) {
+    return "Sanity credentials are invalid or this project is not publicly readable.";
   }
 
-  if (error instanceof CalendarRequestError) {
+  if (error instanceof ShowsRequestError) {
     return error.message;
   }
 
-  if (error instanceof CalendarParseError) {
-    return "Calendar response format changed. Please try again later.";
+  if (error instanceof ShowsParseError) {
+    return "Sanity response format changed. Please try again later.";
   }
 
   if (error instanceof Error) {
@@ -40,7 +40,8 @@ export async function getCalendarPageViewModel(): Promise<CalendarPageViewModel>
     return {
       events: [],
       errorMessage: null,
-      setupMessage: "Set GOOGLE_CALENDAR_API_KEY and GOOGLE_CALENDAR_ID to display events.",
+      setupMessage:
+        "Set NEXT_PUBLIC_SANITY_PROJECT_ID to display shows. NEXT_PUBLIC_SANITY_DATASET defaults to production.",
     };
   }
 

@@ -12,13 +12,13 @@ export default async function CalendarPage() {
       <main className="page page--compact">
         <UiAnimatedContainer>
           <section className="calendar-shell">
-            <h1 className="page-title">Calendar</h1>
+            <h1 className="page-title">Shows</h1>
             <p className="text-muted-sm scrolling-subheader">Upcoming shows, ticket links, and venue details.</p>
           </section>
         </UiAnimatedContainer>
         <UiAnimatedContainer delay={0.05}>
           <div className="state-panel state-panel--setup state-panel--calendar">
-            <p className="state-panel-title">Calendar setup needed</p>
+            <p className="state-panel-title">Shows setup needed</p>
             <p className="text-muted">{viewModel.setupMessage}</p>
           </div>
         </UiAnimatedContainer>
@@ -31,7 +31,7 @@ export default async function CalendarPage() {
       <UiAnimatedContainer>
         <section className="calendar-shell">
           <div className="calendar-heading-row">
-            <h1 className="page-title">Calendar</h1>
+            <h1 className="page-title">Shows</h1>
             <p className="calendar-meta" aria-live="polite">
               {hasEvents ? eventCountLabel : "No scheduled shows yet"}
             </p>

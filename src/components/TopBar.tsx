@@ -16,7 +16,7 @@ export function TopBar() {
             Videos
           </UiNavLink>
           <UiNavLink href="/calendar">
-            Calendar
+            Shows
           </UiNavLink>
           <UiNavLink href="/contact">
             Contact
