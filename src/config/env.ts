@@ -9,10 +9,6 @@ export function getContactFormAction(): string | null {
   return process.env.NEXT_PUBLIC_CONTACT_FORM_ACTION ?? null;
 }
 
-export function getRemoteVideosJsonUrl(): string | null {
-  return process.env.REMOTE_VIDEOS_JSON_URL ?? null;
-}
-
 export function getDefaultColorScheme(): ColorScheme {
   const configuredColorScheme = process.env.COLOR_SCHEME;
 

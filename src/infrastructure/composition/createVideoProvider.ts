@@ -1,15 +1,16 @@
 import type { VideoProvider } from "@/application/ports/videoProvider";
-import { getRemoteVideosJsonUrl } from "@/config/env";
-import { RemoteJsonVideoProvider } from "@/infrastructure/video/remoteJsonVideoClient";
+import { getSanityConfig } from "@/sanity/env";
+import { SanityVideoProvider } from "@/infrastructure/video/sanityVideoClient";
 
 export function createVideoProvider(): VideoProvider | null {
-  const remoteVideosJsonUrl = getRemoteVideosJsonUrl();
-  if (!remoteVideosJsonUrl) {
+  const sanityConfig = getSanityConfig();
+  if (!sanityConfig) {
     return null;
   }
 
-  return new RemoteJsonVideoProvider({
-    url: remoteVideosJsonUrl,
+  return new SanityVideoProvider({
+    projectId: sanityConfig.projectId,
+    dataset: sanityConfig.dataset,
     revalidateSeconds: 300,
   });
 }

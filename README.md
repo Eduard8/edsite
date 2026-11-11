@@ -1,14 +1,13 @@
 ## Comedy Site MVP
 
 Website:
-- `/videos` reads YouTube video entries from a remotely hosted JSON file.
+- `/videos` reads YouTube links from Sanity.
 - `/calendar` reads upcoming shows from Sanity.
 - `/contact` posts to a hosted form endpoint (Formspree, Netlify Forms endpoint, or similar).
 
 ## Requirements
 
 - Node.js 20+
-- A hosted videos JSON URL
 - A Sanity project with a public dataset
 - A hosted form endpoint URL
 
@@ -20,7 +19,6 @@ Copy `.env.example` to `.env.local` and fill in values:
 NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_CONTACT_FORM_ACTION=https://formspree.io/f/your-form-id
-REMOTE_VIDEOS_JSON_URL=https://example.com/videos.json
 COLOR_SCHEME=Boring
 ```
 
@@ -47,35 +45,24 @@ npm run build
 
 ## Notes
 
-- Videos are fetched from a remotely hosted JSON file and revalidated every 5 minutes.
-- Video `title` and `description` are optional in JSON; if `title` is missing, the app resolves it from lightweight YouTube metadata, and if `description` is missing, it is left blank.
-- Shows are fetched from the published Sanity dataset and revalidated every 5 minutes.
+- Videos and shows are fetched from the published Sanity dataset and revalidated every 5 minutes.
+- A video `title` is optional. If it is missing, the app resolves it from YouTube. If `description` is missing, it is left blank.
+- The video file stays on YouTube. Sanity stores the link, text, and an optional thumbnail image.
 - Past shows are omitted. The public page lists the soonest upcoming shows.
-- Add and edit shows at `/studio` after signing in to the Sanity project.
+- Add and edit shows and videos at `/studio` after signing in to the Sanity project.
 - Contact form includes a hidden honeypot field; enable provider-side spam filtering for best results.
 
-### Remote Videos JSON
+### Videos in Sanity
 
-Recommended schema:
+Each video document has:
 
-```json
-{
-	"videos": [
-		{
-			"id": "airport-bit",
-			"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-			"title": "Optional custom title",
-			"description": "Optional custom description",
-			"thumbnail": "https://example.com/custom-thumbnail.jpg"
-		}
-	]
-}
-```
+- `url` (required). A YouTube watch, share, shorts, or embed link.
+- `title` (optional). If omitted, the site uses the YouTube title.
+- `description` (optional)
+- `thumbnail` image (optional). If omitted, the site uses the YouTube thumbnail.
+- `publishedAt` datetime (optional). Newest dates are listed first.
 
-- `url` is required and should be a full YouTube URL.
-- `title`, `description`, and `thumbnail` are optional.
-- If `thumbnail` is omitted, the site derives a standard YouTube thumbnail from the video URL.
-- A public GitHub Gist raw URL works well as the remote JSON host.
+Drafts stay off `/videos` until they are published.
 
 ### Shows in Sanity
 
@@ -98,11 +85,13 @@ Drafts stay off `/calendar` until they are published.
 1. Create a free project at [sanity.io/manage](https://www.sanity.io/manage).
 2. Copy the project id into `NEXT_PUBLIC_SANITY_PROJECT_ID`. Set `NEXT_PUBLIC_SANITY_DATASET` if you are not using `production`.
 3. In the Sanity project API settings, add CORS origins for `http://localhost:3000` and the production site origin, and allow credentials.
-4. Open `/studio`, sign in with the Sanity account that owns the project, and publish a show.
+4. Open `/studio`, sign in with the Sanity account that owns the project, and publish a show or video.
 
 The dataset can stay public for reads. The site does not need a read token.
 
 `/calendar` loads shows through `CalendarProvider` in `src/application/ports/calendarProvider.ts`. The Sanity implementation is wired in `src/infrastructure/composition/createCalendarProvider.ts`.
+
+`/videos` loads videos through `VideoProvider` in `src/application/ports/videoProvider.ts`. The Sanity implementation is wired in `src/infrastructure/composition/createVideoProvider.ts`.
 
 ## Themes
 
