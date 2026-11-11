@@ -3,13 +3,14 @@ import { ClientError, ServerError } from "@sanity/client";
 import { createClient } from "next-sanity";
 import type { CalendarProvider } from "@/application/ports/calendarProvider";
 import { createShowDateTime, createShowEvent, type ShowEvent } from "@/domain/event";
+import { showHasNotFinished, showListQuerySince } from "@/domain/showSchedule";
 import { ShowsAuthError, ShowsParseError, ShowsRequestError } from "@/infrastructure/shows/errors";
 
 const upcomingShowsQuery = `*[
   _type == "show" &&
   defined(start) &&
-  start >= now()
-] | order(start asc) [0...$limit] {
+  coalesce(end, start) >= $since
+] | order(start asc) {
   _id,
   title,
   start,
@@ -61,29 +62,6 @@ type SanityShowsProviderArgs = {
   revalidateSeconds?: number;
 };
 
-function isHttpUrl(value: string): boolean {
-  try {
-    const parsed = new URL(value);
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-function resolveMapsUrl(mapsUrl?: string, venue?: string): string | undefined {
-  const explicit = mapsUrl?.trim();
-  if (explicit && isHttpUrl(explicit)) {
-    return explicit;
-  }
-
-  const place = venue?.trim();
-  if (!place) {
-    return undefined;
-  }
-
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
-}
-
 function optionalText(value?: string): string | undefined {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
@@ -115,12 +93,13 @@ export class SanityShowsProvider implements CalendarProvider {
   }
 
   async getUpcomingEvents(maxResults = 20): Promise<ShowEvent[]> {
+    const now = new Date();
     let documents: unknown;
 
     try {
       documents = await this.client.fetch(
         upcomingShowsQuery,
-        { limit: maxResults },
+        { since: showListQuerySince(now) },
         {
           perspective: "published",
           next: { revalidate: this.revalidateSeconds },
@@ -143,10 +122,13 @@ export class SanityShowsProvider implements CalendarProvider {
       throw new ShowsParseError();
     }
 
-    return documents.flatMap((document) => {
-      const event = this.toShowEvent(document);
-      return event ? [event] : [];
-    });
+    return documents
+      .flatMap((document) => {
+        const event = this.toShowEvent(document);
+        return event ? [event] : [];
+      })
+      .filter((event) => showHasNotFinished(event, now))
+      .slice(0, maxResults);
   }
 
   private toShowEvent(document: unknown): ShowEvent | null {
@@ -187,7 +169,7 @@ export class SanityShowsProvider implements CalendarProvider {
         description: optionalText(show.description),
         imageUrl: this.posterUrl(show.poster),
         venue,
-        mapsUrl: resolveMapsUrl(show.mapsUrl, venue),
+        mapsUrl: optionalText(show.mapsUrl),
         ticketUrl: optionalText(show.ticketUrl),
       });
     } catch {
@@ -201,14 +183,18 @@ export class SanityShowsProvider implements CalendarProvider {
       return undefined;
     }
 
-    return this.images
-      .image({
-        asset: { _ref: ref },
-        crop: poster.crop,
-        hotspot: poster.hotspot,
-      })
-      .width(1200)
-      .auto("format")
-      .url();
+    try {
+      return this.images
+        .image({
+          asset: { _ref: ref },
+          crop: poster.crop,
+          hotspot: poster.hotspot,
+        })
+        .width(1200)
+        .auto("format")
+        .url();
+    } catch {
+      return undefined;
+    }
   }
 }

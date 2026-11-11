@@ -50,7 +50,7 @@ npm run build
 - Videos are fetched from a remotely hosted JSON file and revalidated every 5 minutes.
 - Video `title` and `description` are optional in JSON; if `title` is missing, the app resolves it from lightweight YouTube metadata, and if `description` is missing, it is left blank.
 - Shows are fetched from the published Sanity dataset and revalidated every 5 minutes.
-- Past shows are omitted. The public page lists the soonest upcoming shows.
+- A show stays on the page until it ends. An all-day show stays through the end of that day in Europe/Amsterdam. Card dates use that time zone.
 - Add and edit shows at `/studio` after signing in to the Sanity project.
 - Contact form includes a hidden honeypot field; enable provider-side spam filtering for best results.
 
@@ -88,7 +88,7 @@ Each show document has:
 - `description` (optional)
 - `poster` image (optional)
 - `venue` (optional)
-- `mapsUrl` (optional). If it is omitted and `venue` is set, the site links to a Google Maps search for that venue.
+- `mapsUrl` (optional). The site uses this link only when you set it. A venue name is shown as text and is not turned into a map search.
 - `ticketUrl` (optional)
 
 Drafts stay off `/calendar` until they are published.

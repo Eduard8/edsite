@@ -34,18 +34,18 @@ function toCalendarErrorMessage(error: unknown): string {
 }
 
 export async function getCalendarPageViewModel(): Promise<CalendarPageViewModel> {
-  const provider = createCalendarProvider();
-
-  if (!provider) {
-    return {
-      events: [],
-      errorMessage: null,
-      setupMessage:
-        "Set NEXT_PUBLIC_SANITY_PROJECT_ID to display shows. NEXT_PUBLIC_SANITY_DATASET defaults to production.",
-    };
-  }
-
   try {
+    const provider = createCalendarProvider();
+
+    if (!provider) {
+      return {
+        events: [],
+        errorMessage: null,
+        setupMessage:
+          "Set NEXT_PUBLIC_SANITY_PROJECT_ID to display shows. NEXT_PUBLIC_SANITY_DATASET defaults to production.",
+      };
+    }
+
     const events = await getUpcomingShows(provider, 20);
     return {
       events,
