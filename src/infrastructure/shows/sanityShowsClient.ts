@@ -62,29 +62,6 @@ type SanityShowsProviderArgs = {
   revalidateSeconds?: number;
 };
 
-function isHttpUrl(value: string): boolean {
-  try {
-    const parsed = new URL(value);
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-function resolveMapsUrl(mapsUrl?: string, venue?: string): string | undefined {
-  const explicit = mapsUrl?.trim();
-  if (explicit && isHttpUrl(explicit)) {
-    return explicit;
-  }
-
-  const place = venue?.trim();
-  if (!place) {
-    return undefined;
-  }
-
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
-}
-
 function optionalText(value?: string): string | undefined {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
@@ -192,7 +169,7 @@ export class SanityShowsProvider implements CalendarProvider {
         description: optionalText(show.description),
         imageUrl: this.posterUrl(show.poster),
         venue,
-        mapsUrl: resolveMapsUrl(show.mapsUrl, venue),
+        mapsUrl: optionalText(show.mapsUrl),
         ticketUrl: optionalText(show.ticketUrl),
       });
     } catch {

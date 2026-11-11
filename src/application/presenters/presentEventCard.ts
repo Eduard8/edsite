@@ -37,6 +37,7 @@ export type EventCardViewModel = {
   subtitle: string;
   description?: string;
   mapsUrl?: string;
+  venue?: string;
   venueLabel: string;
   ticketUrl?: string;
 };
@@ -50,6 +51,7 @@ export function presentEventCard(event: ShowEvent): EventCardViewModel {
     subtitle: formatShowDate(event.start.iso, event.start.isAllDay),
     description: event.description,
     mapsUrl: event.mapsUrl,
+    venue: event.venue,
     venueLabel: event.venue ?? "Map",
     ticketUrl: event.ticketUrl,
   };

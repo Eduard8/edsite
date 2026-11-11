@@ -88,7 +88,7 @@ Each show document has:
 - `description` (optional)
 - `poster` image (optional)
 - `venue` (optional)
-- `mapsUrl` (optional). If it is omitted and `venue` is set, the site links to a Google Maps search for that venue.
+- `mapsUrl` (optional). The site uses this link only when you set it. A venue name is shown as text and is not turned into a map search.
 - `ticketUrl` (optional)
 
 Drafts stay off `/calendar` until they are published.
