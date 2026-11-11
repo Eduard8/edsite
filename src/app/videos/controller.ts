@@ -25,17 +25,18 @@ function toVideosErrorMessage(error: unknown): string {
 }
 
 export async function getVideosPageViewModel(): Promise<VideosPageViewModel> {
-  const provider = createVideoProvider();
-
-  if (!provider) {
-    return {
-      videos: [],
-      errorMessage: null,
-      setupMessage: "Set REMOTE_VIDEOS_JSON_URL to display videos.",
-    };
-  }
-
   try {
+    const provider = createVideoProvider();
+
+    if (!provider) {
+      return {
+        videos: [],
+        errorMessage: null,
+        setupMessage:
+          "Set NEXT_PUBLIC_SANITY_PROJECT_ID to display videos. NEXT_PUBLIC_SANITY_DATASET defaults to production.",
+      };
+    }
+
     const videos = await provider.getVideos();
     return {
       videos,
